@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: url(images/pexels-adrien-olichon-1257089-2387793.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        .form-container {
+          display: none;
+        }
+
+        .form-container.active {
+          display: flex;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background-color: #ffffff;
+            padding: 30px;
+            width: 450px;
+            border-radius: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+
+        ::placeholder {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+            Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        }
+
+        .form button {
+            align-self: flex-end;
+        }
+
+        .flex-column > label {
+            color: #151717;
+            font-weight: 600;
+        }
+
+        .inputForm {
+            border: 1.5px solid #ecedec;
+            border-radius: 10px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            transition: 0.2s ease-in-out;
+        }
+
+        .input {
+            margin-left: 10px;
+            border-radius: 10px;
+            border: none;
+            width: 85%;
+            height: 100%;
+        }
+
+        .input:focus {
+            outline: none;
+        }
+
+        .inputForm:focus-within {
+            border: 1.5px solid #2d79f3;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .flex-row > div > label {
+            font-size: 14px;
+            color: black;
+            font-weight: 400;
+        }
+
+        .span {
+            font-size: 14px;
+            margin-left: 5px;
+            color: #2d79f3;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .button-submit {
+            margin: 20px 0 10px 0;
+            background-color: #151717;
+            border: none;
+            color: white;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 10px;
+            height: 50px;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .button-submit:hover {
+            background-color: #252727;
+        }
+
+        .p {
+            text-align: center;
+            color: black;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+
+        .btn {
+            margin-top: 10px;
+            width: 100%;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 500;
+            gap: 10px;
+            border: 1px solid #ededef;
+            background-color: white;
+            cursor: pointer;
+            transition: 0.2s ease-in-out;
+        }
+
+        .btn:hover {
+            border: 1px solid #2d79f3;
+        }
+
+        @media (max-width: 1023px) {
+            .form {
+                width: 80%;
+                padding: 20px;
+            }
+            .inputForm {
+                height: 45px;
+                padding-left: 8px;
+            }
+            .input {
+                font-size: 14px;
+            }
+            .button-submit {
+                font-size: 14px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 641px) {
+            .form {
+                width: 90%;
+                padding: 15px;
+                border-radius: 15px;
+            }
+            .inputForm {
+                height: 40px;
+                padding-left: 6px;
+            }
+             svg {
+                  height: 18px;
+                  width: 18px;
+             }
+            .input {
+                font-size: 12px;
+                margin-left: 5px;
+            }
+            .button-submit {
+                font-size: 13px;
+                height: 40px;
+            }
+            .p {
+                font-size: 12px;
+            }
+        }
+
+
+        @media (max-width: 300px) {
+            .form {
+                width: 95%;
+                padding: 10px;
+                border-radius: 10px;
+            }
+            .inputForm {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+                padding: 5px;
+            }
+           svg {
+                display: none;
+            }
+            .input {
+                width: 100%;
+                margin-left: 0;
+                font-size: 12px;
+            }
+            .button-submit {
+                font-size: 12px;
+                height: 35px;
+            }
+            .p {
+                font-size: 11px;
+            }
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #2d79f3;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="login-form" class="form-container active">
+        <form class="form" onsubmit="login(event)">
+             <div class="flex-column">
+            <label>Email </label>
+            </div>
+            <div class="inputForm">
+                 <svg
+                   height="20"
+                   viewBox="0 0 32 32"
+                   width="20"
+                    xmlns="http://www.w3.org/2000/svg"
+               >
+                 <g id="Layer_3" data-name="Layer 3">
+                   <path
+                   d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"
+                ></path>
+               </g>
+              </svg>
+            <input type="email" class="input" id="login-email" placeholder="Enter your Email" required/>
+            </div>
+             <div class="flex-column">
+                <label>Password </label>
+             </div>
+             <div class="inputForm">
+                <svg
+                   height="20"
+                    viewBox="-64 0 512 512"
+                     width="20"
+                    xmlns="http://www.w3.org/2000/svg"
+                     >
+                   <path
+                      d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"
+                      ></path>
+                    <path
+                    d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"
+                   ></path>
+                </svg>
+                <input type="password" class="input" id="login-password" placeholder="Enter your Password" required minlength="8" maxlength="16"/>
+            </div>
+            <button class="button-submit" type="submit">Log in</button>
+            <p class="p">Don't have an account? <span class="span" onclick="showRegister()">Sign Up</span></p>
+        </form>
+    </div>
+
+    <div id="register-form" class="form-container">
+        <form class="form" onsubmit="register(event)">
+            <div class="flex-column">
+              <label>Name </label>
+           </div>
+             <div class="inputForm">
+                 <svg
+                 height="60"
+                 viewBox="0 -9 32 32"
+                width="40"
+                  xmlns="http://www.w3.org/2000/svg"
+                 >
+                  <g id="Layer_3" data-name="Layer 3">
+                    <path
+                      d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"
+                     ></path>
+                   </g>
+                 </svg>
+              <input type="text" class="input" id="register-name" placeholder="Enter your Name" required/>
+             </div>
+             <div class="flex-column">
+                <label>Email </label>
+              </div>
+             <div class="inputForm">
+               <svg
+                  height="20"
+                  viewBox="0 0 32 32"
+                 width="20"
+                 xmlns="http://www.w3.org/2000/svg"
+                >
+              <g id="Layer_3" data-name="Layer 3">
+                <path
+                 d="m30.853 13.87a15 15 0 0 0 -29.729 4.082 15.1 15.1 0 0 0 12.876 12.918 15.6 15.6 0 0 0 2.016.13 14.85 14.85 0 0 0 7.715-2.145 1 1 0 1 0 -1.031-1.711 13.007 13.007 0 1 1 5.458-6.529 2.149 2.149 0 0 1 -4.158-.759v-10.856a1 1 0 0 0 -2 0v1.726a8 8 0 1 0 .2 10.325 4.135 4.135 0 0 0 7.83.274 15.2 15.2 0 0 0 .823-7.455zm-14.853 8.13a6 6 0 1 1 6-6 6.006 6.006 0 0 1 -6 6z"
+                 ></path>
+              </g>
+             </svg>
+              <input type="email" class="input" id="register-email" placeholder="Enter your Email" required/>
+             </div>
+            <div class="flex-column">
+                <label>Password </label>
+             </div>
+             <div class="inputForm">
+                <svg
+                   height="20"
+                    viewBox="-64 0 512 512"
+                     width="20"
+                    xmlns="http://www.w3.org/2000/svg"
+                     >
+                   <path
+                      d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"
+                      ></path>
+                    <path
+                    d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"
+                   ></path>
+                </svg>
+                <input type="password" class="input" id="register-password" placeholder="Enter your Password"  required minlength="8" maxlength="16"/>
+            </div>
+             <button class="button-submit" type="submit">Sign Up</button>
+             <p class="p">Already have a account? <span class="span" onclick="showLogin()">Login</span></p>
+        </form>
+    </div>
+      <div id="spinner" class="spinner"></div>
+
+  <script>
+     // Function to handle login
+    async function login(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      document.getElementById('spinner').style.display = 'block'; // Show spinner while waiting
+
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const result = await response.json();
+      document.getElementById('spinner').style.display = 'none'; // Hide spinner after response
+
+      if (response.ok) {
+        localStorage.setItem('userEmail', email);
+        window.location.href = "index.html"; // Redirect to main page after login
+      } else {
+        alert(result.error);
+      }
+    }
+
+    // Function to handle registration
+    async function register(event) {
+      event.preventDefault();
+       const name = document.getElementById('register-name').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      document.getElementById('spinner').style.display = 'block'; // Show spinner while waiting
+
+      const response = await fetch('/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({name, email, password }),
+      });
+
+      const result = await response.json();
+      document.getElementById('spinner').style.display = 'none'; // Hide spinner after response
+
+      if (response.ok) {
+        alert(result.message);
+        showLogin(); // Show login form after successful registration
+      } else {
+        alert(result.error);
+      }
+    }
+
+    // Switch to login form
+     function showLogin() {
+      document.getElementById('login-form').classList.add('active');
+      document.getElementById('register-form').classList.remove('active');
+    }
+
+    // Switch to register form
+    function showRegister() {
+      document.getElementById('register-form').classList.add('active');
+      document.getElementById('login-form').classList.remove('active');
+    }
+  </script>
+</body>
+</html>
